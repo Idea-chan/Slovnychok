@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Vocabulary</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #ff8fb8;
+    --pink-deep: #e8558d;
+    --pink-soft: #ffe0ec;
+    --yellow: #ffe066;
+    --yellow-soft: #fff6c9;
+    --ink: #6b3a52;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    font-family: 'Nunito', system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 15% 20%, rgba(255,255,255,.55) 0 3px, transparent 4px),
+      radial-gradient(circle at 80% 30%, rgba(255,255,255,.55) 0 4px, transparent 5px),
+      radial-gradient(circle at 40% 75%, rgba(255,255,255,.55) 0 3px, transparent 4px),
+      radial-gradient(circle at 90% 85%, rgba(255,255,255,.55) 0 5px, transparent 6px),
+      linear-gradient(160deg, #fff3b0 0%, #ffd9e8 50%, #ffb8d4 100%);
+    background-attachment: fixed;
+    padding: 28px 16px 80px;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .deco { position: fixed; font-size: 34px; opacity: .55; pointer-events: none; user-select: none; animation: float 6s ease-in-out infinite; }
+  .d1 { top: 6%; left: 5%; }
+  .d2 { top: 14%; right: 7%; animation-delay: -2s; font-size: 28px; }
+  .d3 { bottom: 12%; left: 8%; animation-delay: -4s; }
+  .d4 { bottom: 8%; right: 6%; animation-delay: -1s; font-size: 40px; }
+  .d5 { top: 50%; left: 2%; animation-delay: -3s; font-size: 24px; }
+  .d6 { top: 45%; right: 2%; animation-delay: -5s; font-size: 26px; }
+  @keyframes float { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-12px) rotate(4deg); } }
+
+  .wrap { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+  h1 {
+    font-family: 'Pacifico', cursive;
+    font-weight: 400;
+    text-align: center;
+    font-size: clamp(32px, 7vw, 48px);
+    margin: 4px 0 6px;
+    color: var(--pink-deep);
+    text-shadow: 3px 3px 0 var(--yellow);
+  }
+  .sub { text-align: center; margin: 0 0 20px; font-weight: 600; opacity: .8; }
+
+  .toolbar { display: flex; justify-content: center; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .add {
+    width: 46px; height: 46px; border-radius: 50%; border: 3px solid #fff;
+    background: linear-gradient(135deg, var(--pink), var(--pink-deep));
+    color: #fff; font-size: 30px; font-weight: 800; line-height: 1; cursor: pointer;
+    box-shadow: 0 4px 0 #c23d74, 0 8px 16px rgba(232,85,141,.35);
+    transition: transform .12s, box-shadow .12s;
+    display: grid; place-items: center; padding: 0 0 3px;
+  }
+  .add:hover { transform: translateY(-2px) scale(1.06); }
+  .add:active { transform: translateY(3px); box-shadow: 0 1px 0 #c23d74, 0 3px 8px rgba(232,85,141,.35); }
+  .counter { background: #fff; border-radius: 999px; padding: 8px 16px; font-weight: 800; box-shadow: 0 3px 0 var(--yellow); }
+
+  .card {
+    background: rgba(255,255,255,.82);
+    backdrop-filter: blur(6px);
+    border: 3px solid #fff;
+    border-radius: 26px;
+    box-shadow: 0 12px 34px rgba(232,85,141,.25);
+    overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  thead th {
+    background: linear-gradient(90deg, var(--yellow), #ffc2da);
+    padding: 14px 12px; text-align: center; font-weight: 800; font-size: 16px; letter-spacing: .03em;
+  }
+  th:nth-child(1), td:nth-child(1) { width: 38%; }
+  th:nth-child(2), td:nth-child(2) { width: 38%; }
+  th:nth-child(3), td:nth-child(3) { width: 24%; }
+  tbody tr { border-top: 2px dashed #ffd0e2; transition: background .15s; }
+  tbody tr:nth-child(odd) { background: var(--yellow-soft); }
+  tbody tr:nth-child(even) { background: var(--pink-soft); }
+  tbody tr:hover { background: #fff; }
+  tbody tr.pop { animation: pop .35s ease-out; }
+  @keyframes pop { from { transform: scale(.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  td { padding: 6px 8px; vertical-align: middle; }
+  td textarea {
+    display: block; width: 100%; border: 2px solid transparent; background: transparent; border-radius: 12px;
+    padding: 10px; font: inherit; font-size: 17px; font-weight: 600; line-height: 1.35; color: var(--ink); outline: none;
+    resize: none; overflow: hidden; white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word;
+  }
+  td textarea:focus { background: #fff; border-color: var(--pink); box-shadow: 0 0 0 3px rgba(255,143,184,.25); }
+  td.date { position: relative; font-size: 14px; font-weight: 700; text-align: center; white-space: nowrap; padding: 6px 22px; }
+  td.date span { opacity: .75; }
+  .del {
+    position: absolute; top: 50%; right: 4px; transform: translateY(-50%);
+    border: none; background: transparent; color: var(--pink-deep); font-size: 20px; line-height: 1;
+    cursor: pointer; opacity: 0; pointer-events: none; z-index: 2;
+    transition: opacity .15s; padding: 4px 6px; font-family: inherit;
+  }
+  td.date.show .del { opacity: .6; pointer-events: auto; }
+  @media (hover: hover) {
+    td.date:hover .del { opacity: .6; pointer-events: auto; }
+  }
+  .del:hover, .del:focus-visible { opacity: .95 !important; outline: none; }
+
+  .overlay {
+    position: fixed; inset: 0; z-index: 100; display: grid; place-items: center;
+    background: rgba(107,58,82,.35); backdrop-filter: blur(3px); padding: 16px;
+  }
+  .dialog {
+    background: #fff; border: 3px solid var(--yellow); border-radius: 22px; padding: 22px 26px;
+    text-align: center; box-shadow: 0 14px 40px rgba(232,85,141,.35); animation: pop .25s ease-out;
+  }
+  .dialog p { margin: 0 0 16px; font-weight: 800; font-size: 18px; }
+  .btns { display: flex; gap: 10px; justify-content: center; }
+  .btns button {
+    font: inherit; font-weight: 800; border: none; border-radius: 999px; padding: 9px 20px; cursor: pointer;
+  }
+  .btns .no { background: var(--yellow-soft); color: var(--ink); }
+  .btns .yes { background: linear-gradient(135deg, var(--pink), var(--pink-deep)); color: #fff; }
+
+  @media (max-width: 560px) {
+    thead th { font-size: 14px; padding: 12px 6px; }
+    td textarea { font-size: 15px; padding: 8px 6px; }
+    td.date { font-size: 12px; padding: 6px 18px 6px 4px; }
+  }
+</style>
+</head>
+<body>
+  <span class="deco d1">🌸</span><span class="deco d2">⭐</span><span class="deco d3">🍯</span>
+  <span class="deco d4">💖</span><span class="deco d5">✨</span><span class="deco d6">🌼</span>
+
+  <div class="wrap">
+    <h1>My Vocabulary</h1>
+    <p class="sub">English → Ukrainian ✨</p>
+
+    <div class="toolbar">
+      <button class="add" id="add" title="Add a row" aria-label="Add a row">+</button>
+      <div class="counter" id="counter">0 words</div>
+    </div>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>Word</th><th>Translation</th><th>Date</th></tr>
+        </thead>
+        <tbody id="body"></tbody>
+      </table>
+    </div>
+  </div>
+
+<script>
+  const KEY = 'slovnychok_v1';
+  const body = document.getElementById('body');
+  const counter = document.getElementById('counter');
+
+  // rows[0] — найновіший (зверху); останній елемент — найстаріший (знизу)
+  let rows = load();
+  if (!rows.length) rows = [newRow()];
+
+  function newRow() { return { id: Date.now() + Math.random().toString(16).slice(2), word: '', tr: '', date: '' }; }
+  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(rows)); } catch (e) {} }
+  function today() {
+    const d = new Date();
+    return String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + d.getFullYear();
+  }
+  function updateCounter() {
+    const n = rows.filter(r => r.word.trim() || r.tr.trim()).length;
+    counter.textContent = n + (n === 1 ? ' word' : ' words');
+  }
+
+  function makeTr(r, animate) {
+    const tr = document.createElement('tr');
+    tr.dataset.id = r.id;
+    if (animate) tr.classList.add('pop');
+    tr.innerHTML = `
+      <td><textarea class="w" rows="1" autocomplete="off" spellcheck="false"></textarea></td>
+      <td><textarea class="t" rows="1" autocomplete="off"></textarea></td>
+      <td class="date"><span></span><button class="del" title="Delete row" aria-label="Delete row">✕</button></td>`;
+    const w = tr.querySelector('.w'), t = tr.querySelector('.t'), d = tr.querySelector('.date span');
+    w.value = r.word; t.value = r.tr; d.textContent = r.date;
+
+    function onInput() {
+      r.word = w.value; r.tr = t.value;
+      if ((r.word.trim() || r.tr.trim())) { if (!r.date) r.date = today(); }
+      else r.date = '';
+      d.textContent = r.date;
+      autosize(w); autosize(t);
+      save(); updateCounter();
+    }
+    w.addEventListener('input', onInput);
+    t.addEventListener('input', onInput);
+    w.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); t.focus(); } });
+    t.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addRow(); } });
+
+    const dateCell = tr.querySelector('td.date');
+    dateCell.addEventListener('click', e => {
+      if (e.target.closest('.del')) return;
+      const wasShown = dateCell.classList.contains('show');
+      hideCrosses();
+      if (!wasShown) dateCell.classList.add('show');
+    });
+
+    tr.querySelector('.del').addEventListener('click', () => {
+      const doDelete = () => {
+        rows = rows.filter(x => x.id !== r.id);
+        if (!rows.length) rows = [newRow()];
+        save(); render();
+      };
+      if (r.word.trim() || r.tr.trim()) askConfirm('Delete this row?', doDelete);
+      else doDelete();
+    });
+    return tr;
+  }
+
+  // own confirm dialog (the browser's confirm() is blocked in some embedded previews)
+  function askConfirm(text, onYes) {
+    const ov = document.createElement('div');
+    ov.className = 'overlay';
+    ov.innerHTML = `<div class="dialog"><p></p><div class="btns"><button class="no">Cancel</button><button class="yes">Delete</button></div></div>`;
+    ov.querySelector('p').textContent = text;
+    const close = () => ov.remove();
+    ov.querySelector('.no').addEventListener('click', close);
+    ov.querySelector('.yes').addEventListener('click', () => { close(); onYes(); });
+    ov.addEventListener('click', e => { if (e.target === ov) close(); });
+    document.body.appendChild(ov);
+    ov.querySelector('.yes').focus();
+  }
+
+  function hideCrosses() {
+    document.querySelectorAll('td.date.show').forEach(c => c.classList.remove('show'));
+  }
+  document.addEventListener('click', e => { if (!e.target.closest('td.date')) hideCrosses(); });
+
+  function autosize(el) {
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+  }
+  function resizeAll() { body.querySelectorAll('textarea').forEach(autosize); }
+
+  function render() {
+    body.innerHTML = '';
+    rows.forEach(r => body.appendChild(makeTr(r, false)));
+    resizeAll();
+    updateCounter();
+  }
+  window.addEventListener('resize', resizeAll);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(resizeAll);
+
+  function addRow() {
+    const r = newRow();
+    rows.unshift(r);                       // новий рядок — зверху
+    save();
+    const tr = makeTr(r, true);
+    body.insertBefore(tr, body.firstChild);
+    tr.querySelector('.w').focus();
+    updateCounter();
+  }
+
+  document.getElementById('add').addEventListener('click', addRow);
+  render();
+</script>
+</body>
+</html>
